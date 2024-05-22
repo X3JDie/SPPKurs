@@ -33,13 +33,15 @@ public class DocumentController {
                                                  @RequestParam("title") String title,
                                                  @RequestParam("description") String description) {
         try {
-            // Сохранение информации о документе в базу данных
+            String filePath = "uploads/" + file.getOriginalFilename();
+            Files.write(Paths.get(filePath), file.getBytes());
+
             Document document = new Document();
             document.setTitle(title);
             document.setDescription(description);
+            document.setFilePath(filePath);
             document.setStatus("Draft");
-            // Сохранение файла в виде массива байтов в базе данных
-            document.setContent(file.getBytes());
+
             documentService.save(document);
 
             return ResponseEntity.ok("Document uploaded successfully.");
@@ -48,20 +50,24 @@ public class DocumentController {
         }
     }
 
-
     @GetMapping
     public ResponseEntity<List<Document>> getAllDocuments() {
         return ResponseEntity.ok(documentService.findAll());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Document> getDocumentById(@PathVariable int id) {
+    public ResponseEntity<Document> getDocumentById(@PathVariable Long id) {
         Optional<Document> documentOptional = documentService.findById(id);
-        return documentOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if (documentOptional.isPresent()) {
+            return ResponseEntity.ok(documentOptional.get());
+        } else {
+            System.err.println("Document not found with id: " + id);
+            return ResponseEntity.status(404).body(null);
+        }
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadDocument(@PathVariable int id) {
+    public ResponseEntity<Resource> downloadDocument(@PathVariable Long id) {
         Optional<Document> documentOptional = documentService.findById(id);
         if (documentOptional.isPresent()) {
             Document document = documentOptional.get();
@@ -71,24 +77,31 @@ public class DocumentController {
 
                 ByteArrayResource resource = new ByteArrayResource(data);
 
+                // Извлекаем оригинальное имя файла из пути
+                String originalFileName = Paths.get(document.getFilePath()).getFileName().toString();
+
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getTitle() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + originalFileName + "\"")
                         .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
                         .body(resource);
             } catch (IOException e) {
+                System.err.println("Error reading file: " + e.getMessage());
                 return ResponseEntity.status(500).body(null);
             }
         } else {
+            System.err.println("Document not found with id: " + id);
             return ResponseEntity.status(404).body(null);
         }
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDocument(@PathVariable int id) {
+    public ResponseEntity<String> deleteDocument(@PathVariable Long id) {
         try {
             documentService.delete(id);
             return ResponseEntity.ok("Document deleted successfully.");
         } catch (Exception e) {
+            System.err.println("Error deleting document with id: " + id + " - " + e.getMessage());
             return ResponseEntity.status(500).body("Document deletion failed.");
         }
     }

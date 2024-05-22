@@ -3,11 +3,9 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.kata.spring.boot_security.demo.models.Document;
 import ru.kata.spring.boot_security.demo.repositories.DocumentRepository;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,19 +41,27 @@ public class DocumentServiceImpl implements DocumentService{
         return documentRepository.save(document);
     }
 
-    @Transactional
-    public Optional<Document> findById(int id) {
-        return Optional.empty();
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Document> findById(Long id) {
+        return documentRepository.findById(id);
     }
 
-    @Transactional
-    public void delete(int id) {
-        documentRepository.deleteById(id);
-    }
-
+    @Override
     @Transactional
     public void delete(Long id) {
-        documentRepository.deleteById(id);
+        Optional<Document> documentOptional = documentRepository.findById(id);
+        if (documentOptional.isPresent()) {
+            Document document = documentOptional.get();
+            try {
+                Path filePath = Paths.get(document.getFilePath());
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not delete file: " + document.getFilePath(), e);
+            }
+            documentRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Document not found with id: " + id);
+        }
     }
-
 }

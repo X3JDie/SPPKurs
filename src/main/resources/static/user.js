@@ -23,7 +23,7 @@ function getUser() {
                             <span>${roles}</span></td>`;
         });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         const documentAPI = 'http://localhost:8080/api/documents';
 
         // Функция для загрузки списка документов
@@ -50,8 +50,8 @@ function getUser() {
                 .catch(error => console.error("Failed to load documents:", error));
         }
 
-        // Обработка формы загрузки документа
-        $('#upload-form').on('submit', function(event) {
+// Upload document
+        $('#upload-form').on('submit', function (event) {
             event.preventDefault();
 
             const formData = new FormData();
@@ -66,7 +66,7 @@ function getUser() {
                 .then(response => {
                     if (response.ok) {
                         alert('Document uploaded successfully.');
-                        loadDocuments(); // Перезагружаем список документов
+                        loadDocuments(); // Reload document list
                     } else {
                         alert('Error uploading document.');
                     }
@@ -74,14 +74,15 @@ function getUser() {
                 .catch(error => console.error('Error uploading document:', error));
         });
 
-        // Событие для кнопки скачивания документа
-        $(document).on('click', '.download-btn', function() {
+// Download document
+        $(document).on('click', '.download-btn', function () {
             const docId = $(this).data('id');
             window.location.href = `${documentAPI}/${docId}/download`;
         });
 
+
         // Событие для кнопки удаления документа
-        $(document).on('click', '.delete-btn', function() {
+        $(document).on('click', '.delete-btn', function () {
             const docId = $(this).data('id');
             fetch(`${documentAPI}/${docId}`, {
                 method: 'DELETE'
