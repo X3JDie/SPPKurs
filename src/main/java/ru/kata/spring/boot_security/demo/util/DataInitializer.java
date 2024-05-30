@@ -68,6 +68,8 @@ public class DataInitializer implements CommandLineRunner {
     private void initializeRoles() {
         roleRepository.save(new Role("ADMIN"));
         roleRepository.save(new Role("USER"));
+        roleRepository.save(new Role("SECRETARY"));
+        roleRepository.save(new Role("SALES"));
     }
 
     private void initializeUsers() {
@@ -88,8 +90,25 @@ public class DataInitializer implements CommandLineRunner {
             regularUser.setRoles(userRoles);
             userService.save(regularUser); // Здесь также вызываем метод save() из UserService
         }
-    }
 
+        Set<Role> salesRoles = new HashSet<>();
+        Role saleRole = roleRepository.findRoleByName("SALES");
+        if (saleRole != null) {
+            salesRoles.add(userRole);
+            User seleUser = new User("SALES", "SALES", 25, "sales@example.com", "salespassword");
+            seleUser.setRoles(salesRoles);
+            userService.save(seleUser);
+        }
+
+        Set<Role> secretaryRoles = new HashSet<>();
+        Role secretaryRole = roleRepository.findRoleByName("SECRETARY");
+        if (secretaryRole != null) {
+            secretaryRoles.add(secretaryRole);
+            User secretaryUser = new User("Secretary", "Secretary", 25, "secretary@example.com", "secretarypassword");
+            secretaryUser.setRoles(secretaryRoles);
+            userService.save(secretaryUser); // Здесь также вызываем метод save() из UserService
+        }
+    }
 
 
     private void initializeAttachments() {

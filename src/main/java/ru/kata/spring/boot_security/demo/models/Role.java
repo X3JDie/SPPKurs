@@ -57,4 +57,7 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return ROLE_PREFIX + getName();
     }
+
+    public void add(Role userRole) {
+    }
 }
