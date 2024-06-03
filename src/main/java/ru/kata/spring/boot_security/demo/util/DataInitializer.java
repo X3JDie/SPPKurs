@@ -77,7 +77,7 @@ public class DataInitializer implements CommandLineRunner {
         Role adminRole = roleRepository.findRoleByName("ADMIN");
         if (adminRole != null) {
             adminRoles.add(adminRole);
-            User adminUser = new User("Admin", "Admin", 30, "admin@example.com", "adminpassword");
+            User adminUser = new User("Admin", "Admin","admin@example.com", "adminpassword");
             adminUser.setRoles(adminRoles);
             userService.save(adminUser); // Здесь вызываем метод save() из UserService
         }
@@ -86,7 +86,7 @@ public class DataInitializer implements CommandLineRunner {
         Role userRole = roleRepository.findRoleByName("USER");
         if (userRole != null) {
             userRoles.add(userRole);
-            User regularUser = new User("User", "User", 25, "user@example.com", "userpassword");
+            User regularUser = new User("User", "User","user@example.com", "userpassword");
             regularUser.setRoles(userRoles);
             userService.save(regularUser); // Здесь также вызываем метод save() из UserService
         }
@@ -94,17 +94,17 @@ public class DataInitializer implements CommandLineRunner {
         Set<Role> salesRoles = new HashSet<>();
         Role saleRole = roleRepository.findRoleByName("SALES");
         if (saleRole != null) {
-            salesRoles.add(userRole);
-            User seleUser = new User("SALES", "SALES", 25, "sales@example.com", "salespassword");
-            seleUser.setRoles(salesRoles);
-            userService.save(seleUser);
+            salesRoles.add(saleRole);
+            User salesUser = new User("SALES", "SALES", "sales@example.com", "salespassword");
+            salesUser.setRoles(salesRoles);
+            userService.save(salesUser);
         }
 
         Set<Role> secretaryRoles = new HashSet<>();
         Role secretaryRole = roleRepository.findRoleByName("SECRETARY");
         if (secretaryRole != null) {
             secretaryRoles.add(secretaryRole);
-            User secretaryUser = new User("Secretary", "Secretary", 25, "secretary@example.com", "secretarypassword");
+            User secretaryUser = new User("Secretary", "Secretary", "secretary@example.com", "secretarypassword");
             secretaryUser.setRoles(secretaryRoles);
             userService.save(secretaryUser); // Здесь также вызываем метод save() из UserService
         }

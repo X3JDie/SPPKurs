@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.models;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "documents")
@@ -11,21 +12,22 @@ public class Document {
     private Long id;
 
     private String title;
-    private String description;
+    private String department; // Поле для хранения департамента
+    private Date uploadDate;   // Поле для хранения даты загрузки
     private String status;
-    private String filePath;  // Добавлено для хранения пути к файлу
+    @Column(length = 5000)
+    private String filePath;
 
     public Document() {
     }
 
-    public Document(String title, String description, String status, String filePath) {
+    public Document(String title, String department, String resolution, Date uploadDate, String status, String filePath) {
         this.title = title;
-        this.description = description;
+        this.department = department;
+        this.uploadDate = uploadDate;
         this.status = status;
         this.filePath = filePath;
     }
-
-    // Геттеры и сеттеры...
 
     public Long getId() {
         return id;
@@ -43,12 +45,20 @@ public class Document {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public Date getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(Date uploadDate) {
+        this.uploadDate = uploadDate;
     }
 
     public String getStatus() {
@@ -65,8 +75,5 @@ public class Document {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
-    }
-
-    public void setContent(byte[] bytes) {
     }
 }

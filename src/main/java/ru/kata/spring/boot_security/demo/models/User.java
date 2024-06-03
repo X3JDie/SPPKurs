@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -30,9 +29,9 @@ public class User implements UserDetails {
     @Column()
     private String surname;
 
-    @Min(value = 1, message = "Age must be greater than 0")
-    @Column()
-    private int age;
+//    @Min(value = 1, message = "Age must be greater than 0")
+//    @Column()
+//    private int age;
 
     @NotEmpty(message = "Username is empty")
     @Size(min = 3, max = 30, message = "Username size from 3 to 30")
@@ -56,10 +55,9 @@ public class User implements UserDetails {
 
     }
 
-    public User(String name, String surname, int age, String email, String password) {
+    public User(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;
-        this.age = age;
         this.email = email;
         this.password = password;
     }
@@ -82,14 +80,6 @@ public class User implements UserDetails {
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     @Override
