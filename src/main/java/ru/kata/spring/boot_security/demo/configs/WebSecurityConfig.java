@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,10 +19,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
 
+
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, @Qualifier("userServiceImpl") UserService userService) {
         this.successUserHandler = successUserHandler;
         this.userService = userService;
+
     }
 
     @Override
@@ -29,21 +32,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/login", "/api/**").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/secretary/**").hasRole("SECRETARY")
+                .antMatchers("/sales/**").hasRole("SALES")
+                .antMatchers("/login", "/api/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin().loginPage("/login")
-                    .loginProcessingUrl("/perform-login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .successHandler(successUserHandler)
-                    .failureUrl("/login?error")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/perform-login")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .successHandler(successUserHandler)
+                .failureUrl("/login?error")
+                .permitAll()
                 .and()
-                    .logout().logoutSuccessUrl("/login" )
-                    .permitAll();
+                .logout()
+                .logoutSuccessUrl("/login")
+                .permitAll();
     }
+
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {

@@ -1,4 +1,5 @@
-const userAPI = 'http://localhost:8080/api/user';
+const userAPI = 'http://localhost:8080/api/sales';
+const documentAPI = 'http://localhost:8080/api/sales/documents';
 const userHeader = document.getElementById("navbar-user");
 const userInfo = document.getElementById("user-info");
 
