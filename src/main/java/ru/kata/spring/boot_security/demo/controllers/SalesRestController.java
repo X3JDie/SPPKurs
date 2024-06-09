@@ -3,35 +3,28 @@ package ru.kata.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.DocumentRepository;
-import ru.kata.spring.boot_security.demo.services.RoleService;
+import ru.kata.spring.boot_security.demo.services.DocumentServiceImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.models.Document;
 
-
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sales")
 public class SalesRestController {
 
     private final UserService userService;
-
-    private final RoleService roleService;
-
-    private final DocumentRepository documentRepository;
+    private final DocumentServiceImpl documentServiceImpl;
 
     @Autowired
-    public SalesRestController(UserService userService, RoleService roleService, DocumentRepository documentRepository) {
+    public SalesRestController(UserService userService, DocumentServiceImpl documentServiceImpl) {
         this.userService = userService;
-        this.roleService = roleService;
-        this.documentRepository = documentRepository;
+        this.documentServiceImpl = documentServiceImpl;
     }
 
     @GetMapping("")
@@ -39,5 +32,36 @@ public class SalesRestController {
         return new ResponseEntity<>(userService.findByUsername(principal.getName()).orElse(null), HttpStatus.OK);
     }
 
- }
+    @GetMapping("/documents")
+    public ResponseEntity<List<Document>> getDocuments() {
+        String department = "SALES";
+        List<Document> documents = documentServiceImpl.findByDepartment(department);
+        return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Document> getDocumentById(@PathVariable Long id) {
+        Optional<Document> documentOptional = documentServiceImpl.findById(id);
+        if (documentOptional.isPresent()) {
+            return new ResponseEntity<>(documentOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+    @PutMapping("/documents/{id}/received")
+    public ResponseEntity<Document> updateDocumentStatusToReceived(@PathVariable Long id) {
+        Optional<Document> documentOptional = documentServiceImpl.findById(id);
+        if (documentOptional.isPresent()) {
+            Document document = documentOptional.get();
+            document.setStatus("Received");
+            document.setReceivedDate(LocalDateTime.now());
+            documentServiceImpl.save(document);
+            return new ResponseEntity<>(document, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+}
