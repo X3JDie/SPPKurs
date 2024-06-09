@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,6 +16,7 @@ public class Document {
     private String department; // Поле для хранения департамента
     private Date uploadDate;   // Поле для хранения даты загрузки
     private String status;
+    private LocalDateTime receivedDate;
     @Column(length = 5000)
     private String filePath;
 
@@ -75,5 +77,13 @@ public class Document {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public LocalDateTime getReceivedDate() {
+        return receivedDate;
+    }
+
+    public void setReceivedDate(LocalDateTime receivedDate) {
+        this.receivedDate = receivedDate;
     }
 }

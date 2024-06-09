@@ -64,4 +64,10 @@ public class DocumentServiceImpl implements DocumentService{
             throw new RuntimeException("Document not found with id: " + id);
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Document> findByDepartment(String department) {
+        return documentRepository.findByDepartment(department);
+    }
 }

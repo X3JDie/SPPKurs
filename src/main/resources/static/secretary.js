@@ -80,7 +80,6 @@ function getUser() {
                 .catch(error => console.error('Error uploading documents:', error));
         });
 // Download document
-// Download document
         $(document).on('click', '.download-btn', function () {
             const docId = $(this).data('id');
             fetch(`${documentAPI}/${docId}/download`)
