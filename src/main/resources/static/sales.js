@@ -1,6 +1,5 @@
 const userAPI = 'http://localhost:8080/api/sales';
-// const documentAPI = 'http://localhost:8080/api/sales/documents';
-// const userAPI = 'http://localhost:8080/api/secretary';
+const documentAPI = 'http://localhost:8080/api/sales/documents';
 const userHeader = document.getElementById("navbar-user");
 const userInfo = document.getElementById("user-info");
 
@@ -25,8 +24,6 @@ function getUser() {
         });
 
     $(document).ready(function () {
-        const documentAPI = 'http://localhost:8080/api/sales/documents';
-
         // Функция для загрузки списка документов
         function loadDocuments() {
             fetch(documentAPI)
@@ -35,17 +32,16 @@ function getUser() {
                     let documentRows = '';
                     documents.forEach(doc => {
                         documentRows += `
-                        <tr>
-                            <td>${doc.id}</td>
-                            <td>${doc.title}</td>
-                            <td>${doc.department}</td>
-                            <td>${new Date(doc.uploadDate).toLocaleString()}</td>
-                            <td>${doc.status}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
-                                
-                            </td>
-                        </tr>`;
+                            <tr>
+                                <td>${doc.id}</td>
+                                <td>${doc.title}</td>
+                                <td>${doc.department}</td>
+                                <td>${new Date(doc.uploadDate).toLocaleString()}</td>
+                                <td>${doc.status}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
+                                </td>
+                            </tr>`;
                     });
                     $('#document-info').html(documentRows);
                 })
@@ -83,9 +79,9 @@ function getUser() {
 
         // Download document
         $(document).on('click', '.download-btn', function () {
-            const documentAPI = 'http://localhost:8080/api/documents';
             const docId = $(this).data('id');
-            fetch(`${documentAPI}/${docId}/download`)
+            console.log(`Starting download for document ID: ${docId}`); // Debug message
+            fetch(`${documentAPI}/${docId}/downloadFile`)
                 .then(response => {
                     if (response.ok) {
                         return response.blob();
@@ -101,25 +97,21 @@ function getUser() {
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
+
+                    // Обновляем статус после успешного скачивания
+                    console.log(`Updating status to received for document ID: ${docId}`); // Debug message
+                    fetch(`${documentAPI}/${docId}/download`, {
+                        method: 'PUT'
+                    }).then(res => {
+                        if (res.ok) {
+                            console.log(`Status updated to received for document ID: ${docId}`); // Debug message
+                            loadDocuments(); // Обновляем список документов
+                        } else {
+                            console.error('Failed to update document status.');
+                        }
+                    }).catch(error => console.error('Error updating document status:', error));
                 })
                 .catch(error => console.error('Error downloading document:', error));
-        });
-
-        // Событие для кнопки удаления документа
-        $(document).on('click', '.delete-btn', function () {
-            const docId = $(this).data('id');
-            fetch(`${documentAPI}/${docId}`, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Document deleted successfully.');
-                        loadDocuments(); // Перезагружаем список документов
-                    } else {
-                        alert('Error deleting document.');
-                    }
-                })
-                .catch(error => console.error('Error deleting document:', error));
         });
 
         // Загрузка документов при загрузке страницы
@@ -128,4 +120,3 @@ function getUser() {
 }
 
 getUser();
-

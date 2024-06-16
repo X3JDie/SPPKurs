@@ -16,4 +16,7 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
     List<Document> findByDepartment(String department);
 
+    List<Document> findByStatus(String status);
+    List<Document> findByDepartmentAndStatus(String departamenrt,String status);
+
 }

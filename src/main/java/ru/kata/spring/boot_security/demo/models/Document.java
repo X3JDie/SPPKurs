@@ -17,6 +17,7 @@ public class Document {
     private Date uploadDate;   // Поле для хранения даты загрузки
     private String status;
     private LocalDateTime receivedDate;
+    private LocalDateTime acceptedDate;
     @Column(length = 5000)
     private String filePath;
 
@@ -86,4 +87,13 @@ public class Document {
     public void setReceivedDate(LocalDateTime receivedDate) {
         this.receivedDate = receivedDate;
     }
-}
+
+    public LocalDateTime getAcceptedDate() {
+        return acceptedDate;
+    }
+
+    public void setAcceptedDate(LocalDateTime acceptedDate) {
+        this.acceptedDate = acceptedDate;
+    }
+
+ }

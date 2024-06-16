@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DocumentServiceImpl implements DocumentService{
+public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
     private final Path fileStorageLocation;
@@ -69,5 +69,14 @@ public class DocumentServiceImpl implements DocumentService{
     @Transactional(readOnly = true)
     public List<Document> findByDepartment(String department) {
         return documentRepository.findByDepartment(department);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Document> findByStatus(String status) {
+        return documentRepository.findByStatus(status);
+    }
+
+    public List<Document> findByDepartmentAndStatus(String department, String status) {
+        return  documentRepository.findByDepartmentAndStatus(department,status);
     }
 }

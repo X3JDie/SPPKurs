@@ -53,7 +53,7 @@ public class DocumentController {
             document.setTitle(title);
             document.setDepartment(department);
             document.setFilePath(fileNames.toString());
-            document.setStatus("Draft");
+            document.setStatus("Wait");
             document.setUploadDate(new Date());
 
             documentService.save(document);

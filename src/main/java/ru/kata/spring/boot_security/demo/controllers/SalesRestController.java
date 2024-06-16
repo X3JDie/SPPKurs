@@ -35,7 +35,8 @@ public class SalesRestController {
     @GetMapping("/documents")
     public ResponseEntity<List<Document>> getDocuments() {
         String department = "SALES";
-        List<Document> documents = documentServiceImpl.findByDepartment(department);
+        String status = "WAI";
+        List<Document> documents = documentServiceImpl.findByDepartmentAndStatus(department, status);
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
