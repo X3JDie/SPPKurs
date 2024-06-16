@@ -24,6 +24,8 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
             httpServletResponse.sendRedirect("/secretary"); // Перенаправление на страницу секретаря
         } else if (roles.contains("ROLE_SALES")) {
             httpServletResponse.sendRedirect("/sales"); // Перенаправление на страницу продаж
+        } else if (roles.contains("ROLE_FINANCE")) {
+            httpServletResponse.sendRedirect("/finance"); // Перенаправление на страницу продаж
         } else {
             httpServletResponse.sendRedirect("/"); // Перенаправление по умолчанию
         }
