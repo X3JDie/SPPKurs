@@ -24,6 +24,9 @@ function getUser() {
 
     $(document).ready(function () {
         const documentAPI = 'http://localhost:8080/api/documents';
+        const documentSalesAPI = 'http://localhost:8080/api/secretary/documentssales';
+        const documentSecretaryAPI = 'http://localhost:8080/api/secretary/documentssecretary';
+        const documentFinanceAPI = 'http://localhost:8080/api/secretary/documentsfinance';
 
         // Функция для загрузки списка документов
         function loadDocuments() {
@@ -50,6 +53,77 @@ function getUser() {
                 .catch(error => console.error("Failed to load documents:", error));
         }
 
+        function loadDocumentsFinance() {
+            fetch(documentFinanceAPI)
+                .then(res => res.json())
+                .then(documents => {
+                    let documentRows = '';
+                    documents.forEach(doc => {
+                        documentRows += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${doc.title}</td>
+                            <td>${doc.department}</td>
+                            <td>${new Date(doc.uploadDate).toLocaleString()}</td>
+                            <td>${doc.status}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
+                                
+                            </td>
+                        </tr>`;
+                    });
+                    $('#document-info-finance').html(documentRows);
+                })
+                .catch(error => console.error("Failed to load documents:", error));
+        }
+
+        function loadDocumentsSales() {
+            fetch(documentSalesAPI)
+                .then(res => res.json())
+                .then(documents => {
+                    let documentRows = '';
+                    documents.forEach(doc => {
+                        documentRows += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${doc.title}</td>
+                            <td>${doc.department}</td>
+                            <td>${new Date(doc.uploadDate).toLocaleString()}</td>
+                            <td>${doc.status}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
+                                
+                            </td>
+                        </tr>`;
+                    });
+                    $('#document-info-sales').html(documentRows);
+                })
+                .catch(error => console.error("Failed to load documents:", error));
+        }
+
+        function loadDocumentsSecretary() {
+            fetch(documentSecretaryAPI)
+                .then(res => res.json())
+                .then(documents => {
+                    let documentRows = '';
+                    documents.forEach(doc => {
+                        documentRows += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${doc.title}</td>
+                            <td>${doc.department}</td>
+                            <td>${new Date(doc.uploadDate).toLocaleString()}</td>
+                            <td>${doc.status}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
+                                
+                            </td>
+                        </tr>`;
+                    });
+                    $('#document-info-secretary').html(documentRows);
+                })
+                .catch(error => console.error("Failed to load documents:", error));
+        }
 
 // Upload document
         $('#upload-form').on('submit', function (event) {
@@ -73,6 +147,9 @@ function getUser() {
                     if (response.ok) {
                         alert('Documents uploaded successfully.');
                         loadDocuments(); // Reload document list
+                        loadDocumentsSales();
+                        loadDocumentsSecretary();
+                        loadDocumentsFinance()
                     } else {
                         alert('Error uploading documents.');
                     }
@@ -106,7 +183,6 @@ function getUser() {
         });
 
 
-
         // Событие для кнопки удаления документа
         $(document).on('click', '.delete-btn', function () {
             const docId = $(this).data('id');
@@ -126,6 +202,9 @@ function getUser() {
 
         // Загрузка документов при загрузке страницы
         loadDocuments();
+        loadDocumentsSales();
+        loadDocumentsSecretary();
+        loadDocumentsFinance()
     });
 }
 
