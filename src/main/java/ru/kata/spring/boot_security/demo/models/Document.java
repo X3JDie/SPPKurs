@@ -17,19 +17,22 @@ public class Document {
     private Date uploadDate;   // Поле для хранения даты загрузки
     private String status;
     private LocalDateTime receivedDate;
-    private LocalDateTime acceptedDate;
+    private Date acceptedDate;
     @Column(length = 5000)
     private String filePath;
 
-    public Document() {
-    }
 
-    public Document(String title, String department, String resolution, Date uploadDate, String status, String filePath) {
+    public Document(String title, String department, String resolution, Date uploadDate, String status, Date acceptedDate, String filePath) {
         this.title = title;
         this.department = department;
         this.uploadDate = uploadDate;
         this.status = status;
+        this.acceptedDate = acceptedDate;
         this.filePath = filePath;
+    }
+
+    public Document() {
+
     }
 
     public Long getId() {
@@ -88,12 +91,11 @@ public class Document {
         this.receivedDate = receivedDate;
     }
 
-    public LocalDateTime getAcceptedDate() {
+    public Date getAcceptedDate() {
         return acceptedDate;
     }
 
-    public void setAcceptedDate(LocalDateTime acceptedDate) {
+    public void setAcceptedDate(Date acceptedDate) {
         this.acceptedDate = acceptedDate;
     }
-
- }
+}

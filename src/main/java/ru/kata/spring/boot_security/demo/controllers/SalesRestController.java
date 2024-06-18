@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.models.Document;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.DocumentServiceImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
-import ru.kata.spring.boot_security.demo.models.Document;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -40,6 +40,14 @@ public class SalesRestController {
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
+    @GetMapping("/documentsaccepted")
+    public ResponseEntity<List<Document>> getDocumentsAccepted() {
+        String department = "SALES";
+        String status = "Accepted";
+        List<Document> documents = documentServiceImpl.findByDepartmentAndStatus(department, status);
+        return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Document> getDocumentById(@PathVariable Long id) {
         Optional<Document> documentOptional = documentServiceImpl.findById(id);
@@ -50,19 +58,4 @@ public class SalesRestController {
         }
     }
 
-
-
-    @PutMapping("/documents/{id}/received")
-    public ResponseEntity<Document> updateDocumentStatusToReceived(@PathVariable Long id) {
-        Optional<Document> documentOptional = documentServiceImpl.findById(id);
-        if (documentOptional.isPresent()) {
-            Document document = documentOptional.get();
-            document.setStatus("Received");
-            document.setReceivedDate(LocalDateTime.now());
-            documentServiceImpl.save(document);
-            return new ResponseEntity<>(document, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 }

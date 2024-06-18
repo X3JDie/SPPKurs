@@ -48,18 +48,4 @@ public class FinanceRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @PutMapping("/documents/{id}/received")
-    public ResponseEntity<Document> updateDocumentStatusToReceived(@PathVariable Long id) {
-        Optional<Document> documentOptional = documentServiceImpl.findById(id);
-        if (documentOptional.isPresent()) {
-            Document document = documentOptional.get();
-            document.setStatus("Received");
-            document.setReceivedDate(LocalDateTime.now());
-            documentServiceImpl.save(document);
-            return new ResponseEntity<>(document, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-}
+  }

@@ -59,6 +59,7 @@ function getUser() {
                 .then(documents => {
                     let documentRows = '';
                     documents.forEach(doc => {
+
                         documentRows += `
                         <tr>
                             <td>${doc.id}</td>
@@ -66,9 +67,10 @@ function getUser() {
                             <td>${doc.department}</td>
                             <td>${new Date(doc.uploadDate).toLocaleString()}</td>
                             <td>${doc.status}</td>
+                           <td>${new Date(doc.acceptedDate).toLocaleString()}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
-                                
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">Delete</button>
                             </td>
                         </tr>`;
                     });
@@ -83,6 +85,7 @@ function getUser() {
                 .then(documents => {
                     let documentRows = '';
                     documents.forEach(doc => {
+
                         documentRows += `
                         <tr>
                             <td>${doc.id}</td>
@@ -90,9 +93,10 @@ function getUser() {
                             <td>${doc.department}</td>
                             <td>${new Date(doc.uploadDate).toLocaleString()}</td>
                             <td>${doc.status}</td>
+                           <td>${new Date(doc.acceptedDate).toLocaleString()}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
-                                
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">Delete</button>
                             </td>
                         </tr>`;
                     });
@@ -101,12 +105,14 @@ function getUser() {
                 .catch(error => console.error("Failed to load documents:", error));
         }
 
+
         function loadDocumentsSecretary() {
             fetch(documentSecretaryAPI)
                 .then(res => res.json())
                 .then(documents => {
                     let documentRows = '';
                     documents.forEach(doc => {
+
                         documentRows += `
                         <tr>
                             <td>${doc.id}</td>
@@ -114,9 +120,10 @@ function getUser() {
                             <td>${doc.department}</td>
                             <td>${new Date(doc.uploadDate).toLocaleString()}</td>
                             <td>${doc.status}</td>
+                           <td>${new Date(doc.acceptedDate).toLocaleString()}</td>
                             <td>
                                 <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
-                                
+                                <button class="btn btn-sm btn-danger delete-btn" data-id="${doc.id}">Delete</button>
                             </td>
                         </tr>`;
                     });
@@ -189,9 +196,6 @@ function getUser() {
                 .catch(error => console.error('Error downloading document:', error));
         });
 
-
-
-
         // Событие для кнопки удаления документа
         $(document).on('click', '.delete-btn', function () {
             const docId = $(this).data('id');
@@ -202,6 +206,9 @@ function getUser() {
                     if (response.ok) {
                         alert('Document deleted successfully.');
                         loadDocuments(); // Перезагружаем список документов
+                        loadDocumentsFinance();
+                        loadDocumentsSecretary();
+                        loadDocumentsSales();
                     } else {
                         alert('Error deleting document.');
                     }

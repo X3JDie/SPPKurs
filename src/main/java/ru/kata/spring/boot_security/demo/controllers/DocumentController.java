@@ -14,9 +14,9 @@ import org.zeroturnaround.zip.ZipUtil;
 import ru.kata.spring.boot_security.demo.models.Document;
 import ru.kata.spring.boot_security.demo.services.DocumentService;
 
+import javax.validation.constraints.Null;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,7 +55,8 @@ public class DocumentController {
             document.setDepartment(department);
             document.setFilePath(fileNames.toString());
             document.setStatus("Wait");
-            document.setUploadDate(new Date());
+
+
 
             documentService.save(document);
 
@@ -86,6 +87,44 @@ public class DocumentController {
         Optional<Document> documentOptional = documentService.findById(id);
         if (documentOptional.isPresent()) {
             Document document = documentOptional.get();
+            String[] filePaths = document.getFilePath().split(";");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ZipUtil.pack(Paths.get("uploads").toFile(), byteArrayOutputStream, name -> {
+                for (String filePath : filePaths) {
+                    if (name.equals(Paths.get(filePath).getFileName().toString())) {
+                        return filePath;
+                    }
+                }
+                return null;
+            });
+
+            ByteArrayResource resource = new ByteArrayResource(byteArrayOutputStream.toByteArray());
+
+            String encodedFilename;
+            encodedFilename = UriUtils.encode(document.getTitle() + ".zip", StandardCharsets.UTF_8);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFilename + "\"");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } else {
+            System.err.println("Document not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/{id}/downloadsales")
+    public ResponseEntity<Resource> downloadDocumentSales(@PathVariable Long id) {
+        Optional<Document> documentOptional = documentService.findById(id);
+        if (documentOptional.isPresent()) {
+            Document document = documentOptional.get();
+            document.setStatus("Accepted");
+            document.setAcceptedDate(new Date());
+
+            documentService.save(document);
             String[] filePaths = document.getFilePath().split(";");
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ZipUtil.pack(Paths.get("uploads").toFile(), byteArrayOutputStream, name -> {
