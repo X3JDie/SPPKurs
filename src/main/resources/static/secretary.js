@@ -162,16 +162,23 @@ function getUser() {
             fetch(`${documentAPI}/${docId}/download`)
                 .then(response => {
                     if (response.ok) {
-                        return response.blob();
+                        const disposition = response.headers.get('Content-Disposition');
+                        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        const matches = filenameRegex.exec(disposition);
+                        let filename = 'document.zip';
+                        if (matches != null && matches[1]) {
+                            filename = decodeURIComponent(matches[1].replace(/['"]/g, ''));
+                        }
+                        return response.blob().then(blob => ({ blob, filename }));
                     } else {
                         throw new Error('Error downloading document.');
                     }
                 })
-                .then(blob => {
+                .then(({ blob, filename }) => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'document.zip';
+                    a.download = filename; // Используем полученное имя файла
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
@@ -181,6 +188,8 @@ function getUser() {
                 })
                 .catch(error => console.error('Error downloading document:', error));
         });
+
+
 
 
         // Событие для кнопки удаления документа
