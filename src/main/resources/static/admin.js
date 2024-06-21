@@ -20,7 +20,6 @@ function getAdmin() {
                                             <td>${principal.id}</td>
                                             <td>${principal.name}</td>
                                             <td>${principal.surname}</td>
-                                            <td>${principal.age}</td>
                                             <td>${principal.email}</td>
                                             <td>
                                                 <span>${roles}</span></td>`;
@@ -45,7 +44,6 @@ function getUsers() {
                         <th scope="row" >${user.id}</th>
                         <td >${user.name}</td>
                         <td >${user.surname}</td>
-                        <td >${user.age}</td>
                         <th >${user.email}</th>
                         <td>
                             <span>${roles}</span></td>
@@ -77,7 +75,6 @@ function showUpdatedUser(id) {
             document.getElementById('idEdit').value = user.id;
             document.getElementById('nameEdit').value = user.name;
             document.getElementById('surnameEdit').value = user.surname;
-            document.getElementById('ageEdit').value = user.age;
             document.getElementById('emailEdit').value = user.email;
             document.getElementById('passwordEdit').value = user.password;
             document.getElementById('editRoles').value = user.roles;
@@ -103,7 +100,6 @@ function updateUser(){
             id: userId,
             name: formEdit.get('nameEdit'),
             surname: formEdit.get('surnameEdit'),
-            age: formEdit.get('ageEdit'),
             email: formEdit.get('emailEdit'),
             password: formEdit.get('passwordEdit'),
             roles: selectRoles
@@ -139,7 +135,6 @@ function showDeletedUser(id) {
             document.getElementById('deleteId').value = user.id;
             document.getElementById('deleteName').value = user.name;
             document.getElementById('deleteSurname').value = user.surname;
-            document.getElementById('deleteAge').value = user.age;
             document.getElementById('deleteEmail').value = user.email;
             document.getElementById('deletePassword').value = user.password;
             document.getElementById('deleteRoles').value = user.roles;
@@ -168,7 +163,6 @@ function deletedUser() {
             id: deleteId,
             name: formEdit.get('deleteName'),
             surname: formEdit.get('deleteSurname'),
-            age: formEdit.get('deleteAge'),
             email: formEdit.get('deleteEmail'),
             password: formEdit.get('deletePassword'),
             roles: selectRoles
@@ -214,7 +208,7 @@ function addUser() {
         const user = {
             name: formData.get('name'),
             surname: formData.get('surname'),
-            age: formData.get('age'),
+
             email: formData.get('email'),
             password: formData.get('password'),
             roles: selectRoles

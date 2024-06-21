@@ -2,6 +2,7 @@ const userAPI = 'http://localhost:8080/api/sales';
 // const documentAPI = 'http://localhost:8080/api/sales/documents';
 // const userAPI = 'http://localhost:8080/api/secretary';
 const documentAPI = 'http://localhost:8080/api/sales/documents';
+const documentuploadAPI = 'http://localhost:8080/api/documents';
 const documentacceptedAPI = 'http://localhost:8080/api/sales/documentsaccepted';
 const documentDownloadAPI = 'http://localhost:8080/api/documents';
 const userHeader = document.getElementById("navbar-user");
@@ -92,7 +93,7 @@ function getUser() {
             formData.append('title', $('#title').val());
             formData.append('department', $('#department').val());
 
-            fetch(`${documentAPI}/upload`, {
+            fetch(`${documentuploadAPI}/upload`, {
                 method: 'POST',
                 body: formData
             })
@@ -100,7 +101,7 @@ function getUser() {
                     if (response.ok) {
                         alert('Documents uploaded successfully.');
                         loadDocuments(); // Reload document list
-                        loadDocumentsAccepted();
+                        loadDocumentsAccepted()
                     } else {
                         alert('Error uploading documents.');
                     }
@@ -121,12 +122,12 @@ function getUser() {
                         if (matches != null && matches[1]) {
                             filename = decodeURIComponent(matches[1].replace(/['"]/g, ''));
                         }
-                        return response.blob().then(blob => ({ blob, filename }));
+                        return response.blob().then(blob => ({blob, filename}));
                     } else {
                         throw new Error('Error downloading document.');
                     }
                 })
-                .then(({ blob, filename }) => {
+                .then(({blob, filename}) => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;

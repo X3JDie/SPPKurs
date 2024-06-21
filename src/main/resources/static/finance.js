@@ -1,6 +1,8 @@
 const userAPI = 'http://localhost:8080/api/finance';
-// const documentAPI = 'http://localhost:8080/api/sales/documents';
-// const userAPI = 'http://localhost:8080/api/secretary';
+const documentAPI = 'http://localhost:8080/api/finance/documents';
+const documentuploadAPI = 'http://localhost:8080/api/documents';
+const documentacceptedAPI = 'http://localhost:8080/api/finance/documentsaccepted';
+const documentDownloadAPI = 'http://localhost:8080/api/documents';
 const userHeader = document.getElementById("navbar-user");
 const userInfo = document.getElementById("user-info");
 
@@ -13,7 +15,7 @@ function getUser() {
                 roles += value.name + " ";
             });
             userHeader.innerHTML = `<span class="fw-bolder">${principal.email}</span>
-                    <span> with roles: </span>
+                    <span> с ролями: </span>
                     <span>${roles}</span>`;
             userInfo.innerHTML = `
                         <th scope="row">${principal.id}</th>
@@ -22,12 +24,44 @@ function getUser() {
                         <td>${principal.email}</td>
                         <td>
                             <span>${roles}</span></td>`;
+        })
+        .catch(error => console.error("Не удалось загрузить информацию о пользователе:", error));
+
+    // Загрузка документов после загрузки страницы
+    $(document).ready(function () {
+        loadDocuments();
+        loadDocumentsAccepted();
+
+        // Отправка формы загрузки документов
+        $('#upload-form').on('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const files = $('#files')[0].files;
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+            formData.append('title', $('#title').val());
+            formData.append('department', $('#department').val());
+
+            fetch(`${documentuploadAPI}/upload`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Документы успешно загружены.');
+                        loadDocuments(); // Обновляем список документов
+                        loadDocumentsAccepted();
+                    } else {
+                        alert('Ошибка при загрузке документов.');
+                    }
+                })
+                .catch(error => console.error('Ошибка при загрузке документов:', error));
         });
 
-    $(document).ready(function () {
-        const documentAPI = 'http://localhost:8080/api/finance/documents';
-
-        // Функция для загрузки списка документов
+        // Загрузка документов
         function loadDocuments() {
             fetch(documentAPI)
                 .then(res => res.json())
@@ -42,90 +76,39 @@ function getUser() {
                             <td>${new Date(doc.uploadDate).toLocaleString()}</td>
                             <td>${doc.status}</td>
                             <td>
-                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Download</button>
-                                
+                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Скачать</button>
                             </td>
                         </tr>`;
                     });
                     $('#document-info').html(documentRows);
                 })
-                .catch(error => console.error("Failed to load documents:", error));
+                .catch(error => console.error("Не удалось загрузить список документов:", error));
         }
 
-        // Upload document
-        $('#upload-form').on('submit', function (event) {
-            event.preventDefault();
-
-            const formData = new FormData();
-            const files = $('#files')[0].files; // Получаем все выбранные файлы
-
-            // Перебираем все выбранные файлы и добавляем их в FormData
-            for (let i = 0; i < files.length; i++) {
-                formData.append('files', files[i]);
-            }
-            formData.append('title', $('#title').val());
-            formData.append('department', $('#department').val());
-
-            fetch(`${documentAPI}/upload`, {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Documents uploaded successfully.');
-                        loadDocuments(); // Reload document list
-                    } else {
-                        alert('Error uploading documents.');
-                    }
+        // Загрузка принятых документов
+        function loadDocumentsAccepted() {
+            fetch(documentacceptedAPI)
+                .then(res => res.json())
+                .then(documents => {
+                    let documentRows = '';
+                    documents.forEach(doc => {
+                        documentRows += `
+                        <tr>
+                            <td>${doc.id}</td>
+                            <td>${doc.title}</td>
+                            <td>${doc.department}</td>
+                            <td>${new Date(doc.uploadDate).toLocaleString()}</td>
+                            <td>${doc.status}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary download-btn" data-id="${doc.id}">Скачать</button>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#document-info-accepted').html(documentRows);
                 })
-                .catch(error => console.error('Error uploading documents:', error));
-        });
-
-        // Download document
-        $(document).on('click', '.download-btn', function () {
-            const documentAPI = 'http://localhost:8080/api/documents';
-            const docId = $(this).data('id');
-            fetch(`${documentAPI}/${docId}/download`)
-                .then(response => {
-                    if (response.ok) {
-                        return response.blob();
-                    } else {
-                        throw new Error('Error downloading document.');
-                    }
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `document-${docId}.zip`; // Имя файла для скачивания
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                })
-                .catch(error => console.error('Error downloading document:', error));
-        });
-
-        // Событие для кнопки удаления документа
-        $(document).on('click', '.delete-btn', function () {
-            const docId = $(this).data('id');
-            fetch(`${documentAPI}/${docId}`, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Document deleted successfully.');
-                        loadDocuments(); // Перезагружаем список документов
-                    } else {
-                        alert('Error deleting document.');
-                    }
-                })
-                .catch(error => console.error('Error deleting document:', error));
-        });
-
-        // Загрузка документов при загрузке страницы
-        loadDocuments();
+                .catch(error => console.error("Не удалось загрузить список принятых документов:", error));
+        }
     });
 }
 
 getUser();
-

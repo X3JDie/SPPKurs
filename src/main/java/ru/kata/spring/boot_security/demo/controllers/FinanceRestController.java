@@ -35,7 +35,16 @@ public class FinanceRestController {
     @GetMapping("/documents")
     public ResponseEntity<List<Document>> getDocuments() {
         String department = "FINANCE";
-        List<Document> documents = documentServiceImpl.findByDepartment(department);
+        String status = "WAIT";
+        List<Document> documents = documentServiceImpl.findByDepartmentAndStatus(department, status);
+        return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
+
+    @GetMapping("/documentsaccepted")
+    public ResponseEntity<List<Document>> getDocumentsAccepted() {
+        String department = "FINANCE";
+        String status = "Accepted";
+        List<Document> documents = documentServiceImpl.findByDepartmentAndStatus(department, status);
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 

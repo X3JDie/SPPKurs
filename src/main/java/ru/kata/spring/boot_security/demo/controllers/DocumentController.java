@@ -55,8 +55,7 @@ public class DocumentController {
             document.setDepartment(department);
             document.setFilePath(fileNames.toString());
             document.setStatus("Wait");
-
-
+            document.setUploadDate(new Date());
 
             documentService.save(document);
 

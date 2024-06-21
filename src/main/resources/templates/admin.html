@@ -65,7 +65,6 @@
                                                     <th scope="col">ID</th>
                                                     <th scope="col">First name</th>
                                                     <th scope="col">Last name</th>
-                                                    <th scope="col">Age</th>
                                                     <th scope="col">Email</th>
                                                     <th scope="col">Role</th>
                                                     <th scope="col">Edit</th>
@@ -91,8 +90,6 @@
                                                 <input class="form-control m-auto input-new" id="name" type="text" name="name" aria-label="name" style="width: 290px;">
                                                 <label for="surname"><h6><strong>Last name</strong></h6></label>
                                                 <input class="form-control m-auto input-new" id="surname" type="text" name="surname" aria-label="surname" style="width: 290px;">
-                                                <label for="age"><h6><strong>Age</strong></h6></label>
-                                                <input class="form-control m-auto input-new" id="age" type="text"  name="age" aria-label="age" style="width: 290px;">
                                                 <label for="email"><h6><strong>Email</strong></h6></label>
                                                 <input class="form-control m-auto input-new" id="email" type="email" name="email" aria-label="email" style="width: 290px;">
                                                 <label for="password"><h6><strong>Password</strong></h6></label>
@@ -101,6 +98,9 @@
                                                 <select class="form-select m-auto input-new" id="roles" name="roles" style="width: 290px; height: 60px;" multiple aria-label="roles">
                                                     <option value="1">ADMIN</option>
                                                     <option value="2">USER</option>
+                                                    <option value="4">SALES</option>
+                                                    <option value="5">FINANCE</option>
+                                                    <option value="3">SECRETARY</option>
                                                 </select>
                                                 <br/>
                                                 <button type="submit" id="addUser" class="btn btn-success mx-auto">Add new user</button>
@@ -127,7 +127,6 @@
                                             <th scope="col">ID</th>
                                             <th scope="col">First name</th>
                                             <th scope="col">Last name</th>
-                                            <th scope="col">Age</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Role</th>
                                         </tr>
@@ -160,8 +159,6 @@
                 <figure class="text-center  pt-2"><h6>Last name</h6></figure>
                 <input class="form-control m-auto" autocomplete="off" type="text" id="surnameEdit" name="surnameEdit" aria-label="editSurname" style="width: 290px;">
                 <figure class="text-center pt-2"><h6>Age</h6></figure>
-                <input class="form-control m-auto" autocomplete="off" type="text" id="ageEdit" name="ageEdit" aria-label="editAge" style="width: 290px;">
-                <figure class="text-center pt-2"><h6>Email</h6></figure>
                 <input class="form-control m-auto" autocomplete="off" type="email" id="emailEdit" name="emailEdit" aria-label="editEmail" style="width: 290px;">
                 <figure class="text-center pt-2"><h6>Password</h6></figure>
                 <input class="form-control m-auto" autocomplete="off" type="password" id="passwordEdit" name="passwordEdit" aria-label="editPassword" style="width: 290px;">
@@ -169,6 +166,9 @@
                 <select class="form-select m-auto" autocomplete="off" style="width: 290px; height: 60px;" id="editRoles" name="editRoles" multiple aria-label="editRoles">
                     <option value="1">ADMIN</option>
                     <option value="2">USER</option>
+                    <option value="4">SALES</option>
+                    <option value="5">FINANCE</option>
+                    <option value="3">SECRETARY</option>
                 </select>
                 <div class="modal-footer">
                     <button type="button" id="editCloseForm" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -197,15 +197,16 @@
                     <figure class="text-center pt-2"><h6>Last name</h6></figure>
                     <input class="form-control m-auto" id="deleteSurname" type="text" aria-label="disabledSurname" disabled style="width: 290px;">
                     <figure class="text-center pt-2"><h6>Age</h6></figure>
-                    <input class="form-control m-auto" id="deleteAge" type="text" aria-label="disabledAge" disabled style="width: 290px;">
-                    <figure class="text-center pt-2"><h6>Email</h6></figure>
-                    <input class="form-control m-auto" id="deleteEmail" type="email" aria-label="disabledEmail" disabled style="width: 290px;">
+                   <input class="form-control m-auto" id="deleteEmail" type="email" aria-label="disabledEmail" disabled style="width: 290px;">
                     <figure class="text-center pt-2"><h6>Password</h6></figure>
                     <input class="form-control m-auto" id="deletePassword" type="password" aria-label="disabledPassword" disabled style="width: 290px;">
                     <figure class="text-center pt-2"><h6>Role</h6></figure>
                     <select class="form-select m-auto" disabled style="width: 290px; height: 60px;" multiple aria-label="disabledRoles" id="deleteRoles">
                         <option value="1">ADMIN</option>
                         <option value="2">USER</option>
+                        <option value="4">SALES</option>
+                        <option value="5">FINANCE</option>
+                        <option value="3">SECRETARY</option>
                     </select>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="deleteClose" data-bs-dismiss="modal">Close</button>

@@ -133,24 +133,24 @@
                                         </tbody>
                                     </table>
                                     <!-- Форма для загрузки документов -->
-                                    <form id="upload-form-accepted">
+                                    <form id="upload-form" enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <label for="title" class="form-label">Title</label>
-                                            <input type="text" class="form-control" id="title-accepted" name="title"
-                                                   required>
+                                            <input type="text" class="form-control" id="title" name="title" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
-                                            <input type="text" class="form-control" id="description-accepted"
-                                                   name="description"
-                                                   required>
+                                            <label for="department" class="form-label">Department</label>
+                                            <select class="form-control" id="department" name="department" required>
+                                                <option value="SECRETARY">Secretary</option>
+                                                <option value="FINANCE">Finance</option>
+                                            </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="file" class="form-label">Upload File</label>
-                                            <input type="file" class="form-control" id="file-accepted" name="file"
-                                                   accept=".pdf,.doc,.docx" required>
+                                            <label for="files" class="form-label">Upload Files</label>
+                                            <input type="file" class="form-control" id="files" name="files"
+                                                   accept=".pdf,.doc,.docx" multiple required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Upload Document</button>
+                                        <button type="submit" class="btn btn-primary">Upload Documents</button>
                                     </form>
                                 </div>
                             </div>

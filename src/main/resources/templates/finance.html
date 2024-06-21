@@ -36,7 +36,11 @@
                     <!-- Добавленный пункт меню для перехода к разделу документов -->
                     <li class="nav-item">
                         <a href="#document-panel" class="nav-link" aria-selected="false"
-                           data-bs-toggle="pill">Documents</a>
+                           data-bs-toggle="pill">Documents new</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#document-panel-accepted" class="nav-link" aria-selected="false"
+                           data-bs-toggle="pill">Documents aceppted</a>
                     </li>
                 </ul>
             </div>
@@ -77,7 +81,7 @@
                 <!--Document panel-->
                 <div class="tab-pane fade" id="document-panel" role="tabpanel" aria-labelledby="nav-document-tab">
                     <div class="container-fluid">
-                        <h1>Finance Documents</h1>
+                        <h1>Sales Documents</h1>
                         <div class="container-fluid g-0 bg-white">
                             <div class="border g-0 p-1 bg-light">
                                 <h6 class="pt-2 px-3">Document List</h6>
@@ -98,30 +102,61 @@
                                         <!-- Сюда будут добавлены строки с документами -->
                                         </tbody>
                                     </table>
-                                    <!-- Форма для загрузки документов -->
-                                    <form id="upload-form">
-                                        <div class="mb-3">
-                                            <label for="title" class="form-label">Title</label>
-                                            <input type="text" class="form-control" id="title" name="title" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
-                                            <input type="text" class="form-control" id="description" name="description"
-                                                   required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="file" class="form-label">Upload File</label>
-                                            <input type="file" class="form-control" id="file" name="file"
-                                                   accept=".pdf,.doc,.docx" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Upload Document</button>
-                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="tab-pane fade" id="document-panel-accepted" role="tabpanel"
+                     aria-labelledby="nav-document-tab">
+                    <div class="container-fluid">
+                        <h1>Sales Documents</h1>
+                        <div class="container-fluid g-0 bg-white">
+                            <div class="border g-0 p-1 bg-light">
+                                <h6 class="pt-2 px-3">Document List</h6>
+                            </div>
+                            <div class="row align-items-start px-3">
+                                <div class="col">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Received</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="document-info-accepted">
+                                        <!-- Сюда будут добавлены строки с документами -->
+                                        </tbody>
+                                    </table>
+                                    <!-- Форма для загрузки документов -->
+                                    <form id="upload-form" enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label for="title" class="form-label">Title</label>
+                                            <input type="text" class="form-control" id="title" name="title" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="department" class="form-label">Department</label>
+                                            <select class="form-control" id="department" name="department" required>
+                                                <option value="SECRETARY">Secretary</option>
+                                                <option value="SALE">Sale</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="files" class="form-label">Upload Files</label>
+                                            <input type="file" class="form-control" id="files" name="files"
+                                                   accept=".pdf,.doc,.docx" multiple required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Upload Documents</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
